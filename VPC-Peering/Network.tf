@@ -5,18 +5,15 @@
 
 resource "aws_internet_gateway" "canada-vpc-IGW" {
   vpc_id = aws_vpc.canada-vpc.id
-  provider = aws.ca_central_1
 }
 
 resource "aws_internet_gateway" "us-vpc-IGW" {
   vpc_id = aws_vpc.us-vpc.id
-  provider = aws.us_east_1
 }
 
 resource "aws_route_table_association" "canada-rt-association" {
   subnet_id = aws_subnet.canada-vpc-subnet.id
   route_table_id = aws_vpc.canada-vpc.main_route_table_id
-  provider = aws.ca_central_1
 }
 
 resource "aws_route" "canada-rt" {
@@ -25,13 +22,11 @@ resource "aws_route" "canada-rt" {
   gateway_id = aws_internet_gateway.canada-vpc-IGW.id
   vpc_peering_connection_id = aws_vpc_peering_connection.peer-canada-us.id
   destination_cidr_block = aws_vpc.us-vpc.cidr_block
-  provider = aws.ca_central_1
 }
 
 resource "aws_route_table_association" "us-rt-association" {
   subnet_id = aws_subnet.us-vpc-subnet.id
   route_table_id = aws_vpc.us-vpc.main_route_table_id
-  provider = aws.us_east_1
 }
 
 resource "aws_route" "us-rt" {
@@ -40,7 +35,6 @@ resource "aws_route" "us-rt" {
   gateway_id = aws_internet_gateway.us-vpc-IGW.id
   vpc_peering_connection_id = aws_vpc_peering_connection.peer-canada-us.id
   destination_cidr_block = aws_vpc.canada-vpc.cidr_block
-  provider = aws.us_east_1
 
 }
 
